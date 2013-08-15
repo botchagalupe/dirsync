@@ -33,10 +33,10 @@ Options:
 ## Adding LDAP service.
 Dirsync-Tool i.0 only supports user prompt feature for data intake. A customer can have multiple LDAP services with different configurations. Here are the attribute values the user should gather from LDAP/AD administrator before integrating LDAP with Enstratius.
 
-<code>customer_admin_group</code>
+1. <code>customer_admin_group</code>
  : The CN of the group in the directory service (for example, ‘Administrators’) that will always have administrative access across all accounts in the infrastructure. This value may be null. If null, user must have some non-directory service group as admin group elsewhere. Enstratius will search under ldap_group_base for an object with an object class of ldap_ group_object_class and the CN matching this value. That group will be the admin group.
 
-<code>standard_groups</code>
+2. <code>standard_groups</code>
  : Similar to customer_admin_group, this value is a comma-separated list of group CNs representing the groups to be replicated between Enstratius and directory service. This may be null if trying to replicate the customer_admin_group. This list should not, however, include the customer_admin_group. Users in these groups will be synchronized into Enstratius, but the groups won’t have any special access except that defined by roles they are assigned.
 
 <code>ldap_access_endpoint</code>
