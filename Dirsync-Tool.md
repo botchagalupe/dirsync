@@ -4,6 +4,7 @@ Dirsync-Tool is a mutlinode sbin tool that allows you configure LDAP inetgration
 ## Usage
 
 ```
+root@vagrant:/services/console/sbin# ./dirsync-tool.sh -h
 Usage: -action
 
 Options:
@@ -28,3 +29,12 @@ Options:
       -m $directoryServiceID  Update customer admin and standard groups for a LDAP service.
 
 ```
+
+## Adding LDAP service.
+Dirsync-Tool i.0 only supports user prompt feature for data intake. A customer can have multiple LDAP services with different configurations. Here are the attribute values the user should gather from LDAP/AD administrator before integrating LDAP with Enstratius.
+
+
+
+## Listing LDAP services
+
+There are two tables in the console database that represents a LDAP service : customer_ldap_service and customer_ldap_directory. When listing a LDAP service with the tool, it incorporates the contents of both the tables into one. 
