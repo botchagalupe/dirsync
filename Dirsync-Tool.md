@@ -135,4 +135,4 @@ The LDAP attribute storing the user’s preferred time zone.
 
 ## Listing LDAP services
 
-There are two tables in the console database that represents a LDAP service : customer_ldap_service and customer_ldap_directory. When listing a LDAP service with the tool, it incorporates the contents of both the tables into one. 
+There are two tables in the console database that represents a LDAP service : <code>customer_ldap_service</code> and <code>customer_ldap_directory</code>. When listing a LDAP service with the tool, it incorporates the contents of both the tables into one. 
