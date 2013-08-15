@@ -39,78 +39,79 @@ Dirsync-Tool i.0 only supports user prompt feature for data intake. A customer c
 2. <code>standard_groups</code>
  : Similar to customer_admin_group, this value is a comma-separated list of group CNs representing the groups to be replicated between Enstratius and directory service. This may be null if trying to replicate the customer_admin_group. This list should not, however, include the customer_admin_group. Users in these groups will be synchronized into Enstratius, but the groups won’t have any special access except that defined by roles they are assigned.
 
-<code>ldap_access_endpoint</code>
+3. <code>ldap_access_endpoint</code>
  : For example, ldap://ad.example.com/. This is the LDAP server.
 
-<code>ldap_access_principal</code>
+4. <code>ldap_access_principal</code>
  : The formal DN for the principal being used to authenticate connections with LDAP. For example, ‘CN=LDAP User,CN=Users,DC=ad,DC=example,DC=com’.
 
-<code>ldap access password</code>
+5. <code>ldap access password</code>
  : The directory service access password. DirsyncTool will encrypt the password and generate a secrete access code and store in database as <code>ldap_access_secret</code>.
 
-<code>ldap_access_ssl</code>
+6. <code>ldap_access_ssl</code>
  : A value of ‘Y’ or ‘N’ depending on whether SSL should be used for the communications with the LDAP server. ‘Y’ is recommended.
 
-<code>ldap_group_base</code>
+7. <code>ldap_group_base</code>
  : The base DN for the object under which group objects are stored. For example, ‘CN=Builtin,D C=ad,DC=example,DC=com’. Enstratius will do a deep search under this object for groups.
 
-<code>ldap_group_description</code>
+8. <code>ldap_group_description</code>
  : The name of the LDAP attribute containing the value to be used as a group description when the group is represented in Enstratius. If you do not have any kind of description attribute, just use the CN value or what is defined in ldap_group_name.
 
-<code>ldap_group_name</code>
+9. <code>ldap_group_name</code>
  : The LDAP attribute containing the name of the group. This value should be unique across all groups. It is typically ‘CN’.
 
-<code>ldap_group_object_class</code>
+10. <code>ldap_group_object_class</code>
  : The object class for groups in the LDAP/AD directory. Typically, this value is ‘group’.
 
-<code>ldap_group_usernames</code>
+11. <code>ldap_group_usernames</code>
  : The LDAP attribute that contains the user names of the users that belong to this group.
 
-<code>ldap_object_class</code>
+12. <code>ldap_object_class</code>
  : The LDAP attribute that defines an object’s object class. For example, ‘objectClass’.
 
-<code>ldap_user_base</code>
+13. <code>ldap_user_base</code>
  : The base DN under which users are stored. For example, ‘CN=Users,DC=ad,DC=example,DC =com’. Enstratius will do a deep search under this object for users.
 
-<code>ldap_user_email</code>
+14. <code>ldap_user_email</code>
  : The LDAP attribute representing a user email. In some organizations, the email address may be embedded inside a more complex text attribute. You can use the values ldap_email_ regex and ldap_email_regex_index to pull the email value from that text. Enstratius requires user emails to be unique and serves as the user’s primary mechanism for identifying themselves to Enstratius.
 
-<code>ldap_user_family_name</code>
+15. <code>ldap_user_family_name</code>
  : The LDAP attribute that stores a person’s last name/family name.
 
-<code>ldap_user_given_name</code>
+16. <code>ldap_user_given_name</code>
  : The LDAP attribute that stores a person’s first name/given name.
 
-<code>ldap_user_group</code>
+17. <code>ldap_user_group</code>
  : The LDAP attribute that defines the user’s group membership.
 
-<code>ldap_user_object_class</code>
+18. <code>ldap_user_object_class</code>
  : The LDAP object class for users. For example, ‘user’.
 
-<code>ldap_user_user_name</code>
+19. <code>ldap_user_user_name</code>
  : The LDAP attribute that stores the user name a person uses to login with other systems when a user name (as opposed to an email address) is used to identify them.
 
 
-##### Enstratius also optionally looks for the following attributes:
+###### Enstratius also optionally looks for the following attributes:
 
-<code>ldap_default_phone_region</code>
+20. <code>ldap_default_phone_region</code>
  : The default region for interpreting the phone number fields. For example, ‘US’.
 
-<code>ldap_email_regex</code>
+23. <code>ldap_email_regex</code>
  : A Java regex that tells Enstratius how to parse the values in the ldap_user_email field.
 
-<code>ldap_email_regex_index</code>
+24. <code>ldap_email_regex_index</code>
  : The index identifying which part of the regex stores the email address.
 
-<code>ldap_user_mobile</code>
+25. <code>ldap_user_mobile</code>
  : The LDAP attribute containing the user’s mobile phone number. This value is required when using LDAP with an SMS-based Enstratius multi-factor authentication. If the mobile phone number is from a country different than the one defined by ldap_default_phone_region, it should start with a country code. Otherwise, Enstratius will interpret it as belonging in the default phone region country.
 
-<code>ldap_user_time_zone</code>
+26. <code>ldap_user_time_zone</code>
  : The LDAP attribute storing the user’s preferred time zone.
 
 
 
 Once you have these information, it can be stored in the database via Dirsyc Tool. The tool will prompt user to enter all of the above information along with other general high level information.
+
 NOTE: The tool will validate the LDAP credentials first before passsing some other LDAP configuration values.
 
 ```
