@@ -34,20 +34,19 @@ Options:
 Dirsync-Tool i.0 only supports user prompt feature for data intake. A customer can have multiple LDAP services with different configurations. Here are the attribute values the user should gather from LDAP/AD administrator before integrating LDAP with Enstratius.
 
 <code>customer_admin_group</code>
- : The CN of your the group in your directory service (for example, ‘Administrators’) that will always have administrative access across all accounts in your infrastructure. This value may be null. If null, you must have some non-directory service group as your admin group elsewhere. Enstratius will search under ldap_group_base for an object with an object class of ldap_ group_object_class and the CN matching this value. That group will be the admin group.
+ : The CN of the group in the directory service (for example, ‘Administrators’) that will always have administrative access across all accounts in the infrastructure. This value may be null. If null, user must have some non-directory service group as admin group elsewhere. Enstratius will search under ldap_group_base for an object with an object class of ldap_ group_object_class and the CN matching this value. That group will be the admin group.
 
 <code>standard_groups</code>
- : Similar to customer_admin_group, this value is a comma-separated list of group CNs representing the groups to be replicated between Enstratius and your directory service. This may be null if you are just replicating the customer_admin_group. This list should not, however, include the customer_admin_group. Users in these groups will be synchronized into Enstratius, but the groups won’t have any special access except that defined by roles you assign.
+ : Similar to customer_admin_group, this value is a comma-separated list of group CNs representing the groups to be replicated between Enstratius and directory service. This may be null if trying to replicate the customer_admin_group. This list should not, however, include the customer_admin_group. Users in these groups will be synchronized into Enstratius, but the groups won’t have any special access except that defined by roles they are assigned.
 
 <code>ldap_access_endpoint</code>
- : For example, ldap://ad.example.com/. This is your LDAP server.
+ : For example, ldap://ad.example.com/. This is the LDAP server.
 
 <code>ldap_access_principal</code>
  : The formal DN for the principal being used to authenticate connections with LDAP. For example, ‘CN=LDAP User,CN=Users,DC=ad,DC=example,DC=com’.
 
-<code>ldap_access_secret</code>
- : The encrypted secret password for your directory service access. In order to create this
-value, you must run the command java com.enstratus.directory.CustomerLdapDirectory CUSTOMER_ID ENCRYPTION_KEY PASSWORD and use the encryption key defined in the classes/cms/networks.cfg file under the encryptionKey value to perform the encryption. You must have the enstratus-directory-2011.08.1.jar file in your CLASSPATH. This encrypted value cannot be decrypted with the encryption password alone. The output of the command is what you stick in ldap_access_secret.
+<code>ldap access password</code>
+ : The directory service access password. DirsyncTool will encrypt the password and generate a secrete access code and store in database as <code>ldap_access_secret</code>.
 
 <code>ldap_access_ssl</code>
  : A value of ‘Y’ or ‘N’ depending on whether SSL should be used for the communications with the LDAP server. ‘Y’ is recommended.
@@ -62,7 +61,7 @@ value, you must run the command java com.enstratus.directory.CustomerLdapDirecto
  : The LDAP attribute containing the name of the group. This value should be unique across all groups. It is typically ‘CN’.
 
 <code>ldap_group_object_class</code>
- : The object class for groups in your LDAP/AD directory. Typically, this value is ‘group’.
+ : The object class for groups in the LDAP/AD directory. Typically, this value is ‘group’.
 
 <code>ldap_group_usernames</code>
  : The LDAP attribute that contains the user names of the users that belong to this group.
