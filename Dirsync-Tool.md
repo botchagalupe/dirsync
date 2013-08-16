@@ -159,3 +159,38 @@ Created LDAP service Testing with ID : 800
 
 
 There are two tables in the console database that represents a LDAP service : <code>customer_ldap_service</code> and <code>customer_ldap_directory</code>. When listing a LDAP service with the tool, it incorporates the contents of both the tables into one. 
+
+```
+```
+
+## Removing a LDAP service 
+
+Removing a LDAP service will remove the contents from both <code>customer_ldap_service</code> and <code>customer_ldap_directory</code> related that directory service.
+
+``
+
+``
+
+## Updating LDAP service
+
+The tool allows a user to update exisitng LDAP services. It will prompt user to enter new values for each of the mutable attributes in code>customer_ldap_service</code> and <code>customer_ldap_directory</code> 
+
+``
+``
+
+## Updating groups of a LDAP service
+
+Groups in AD is one of the attributes that changes more frequently. Customer can add/remove groups and these group name information will have to be changed manually for now. The tool allows you to change the change just the groups attributes of the LDAP service in Enstratius.
+
+``
+``
+
+# Listing group mapping 
+
+The contents of group mappings is managed by the dirsync code. No manual steps for populating the database is required. However we can view it's contents by the tool for debugging puroposes.
+
+```
+```
+
+
+
