@@ -1,6 +1,11 @@
 ## Dirsync-Tool
 Dirsync-Tool is a mutlinode sbin tool that allows you configure LDAP inetgration with Enstratius and run directory synchronization.
 
+## Enstratius LDAP Integration
+We can use Enstratius to leverage LDAP or Active Directory (AD) as an authoritative source of user data for a customer. Enstratius can synchronize its internal directory with a subset of groups within LDAP or AD and all users in those groups. When a customer adds a user to LDAP, for example, and that user is in one of the synchronized groups, Enstratius will discover the user and add that user and all group memberships for that user in Enstratius. If that user is terminated, Enstratius will remove all the user accesses and group membership in the Enstratius directory as well. Users can be categorized into two different kinds of groups for the directory synchronization process.
+
+Admin Group: We should only have one group in AD that will represent an Admin group in Enstratius for a customer. Users belonging to this group will have admin access to all the accounts in Enstratius for that particular customer.
+Standard/Non-Admin Groups: We can have multiple standard groups in AD. Members belonging to this group will have limited/controlled access to selective accounts in Enstratius for a particular customer.
 ## Usage
 
 ```
