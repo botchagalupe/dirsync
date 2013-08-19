@@ -27,15 +27,15 @@ Options:
       -a                      Add a LDAP Service. 
       -u $directoryServiceID  Update existing LDAP Service in database. 
       -r $directoryServiceID  Remove sepcific LDAP service from database. 
-      -p                      Pre-run dirsync that logs the changes in the dirsync run. 
-      -f                      Run an actual dirsync
+      -p                      Pre-run dirsync. 
+      -f                      Run dirsync
       -c                      Check authentication with LDAP credentials.
       -m $directoryServiceID  Update customer admin and standard groups for a LDAP service.
 
 ```
 
 ## Adding LDAP service.
-Dirsync-Tool i.0 only supports user prompt feature for data intake. A customer can have multiple LDAP services with different configurations. Here are the attribute values the user should gather from LDAP/AD administrator before integrating LDAP with Enstratius.
+Dirsync-Tool i.0 only supports user prompt feature for data intake. A customer can have multiple LDAP services with different configurations. Before integrating LDAP with Enstratius, we will require gathering of some schema mapping information from the LDAP/AD administrator.
 
 1. <code>customer_admin_group</code>
  : The CN of the group in the directory service (for example, ‘Administrators’) that will always have administrative access across all accounts in the infrastructure. This value may be null. If null, user must have some non-directory service group as admin group elsewhere. Enstratius will search under ldap_group_base for an object with an object class of ldap_ group_object_class and the CN matching this value. That group will be the admin group.
@@ -113,12 +113,55 @@ Dirsync-Tool i.0 only supports user prompt feature for data intake. A customer c
  : The LDAP attribute storing the user’s preferred time zone.
 
 
-Once we have these information, it can be stored in the database via Dirsyc Tool. The tool will prompt user to enter all of the above information along with other general high level information.
+Once we have these information, it can be stored in the database via Dirsyc Tool. The directory synchronization process will extract information from the database in order to extract groups and users from LDAP server and sync them with Enstratius. 
 
-NOTE: The tool will validate the LDAP credentials first before passsing some other LDAP configuration values.
+NOTE: The tool will validate the LDAP credentials first before moving on to populating the database.
 
 ```
+#Example 
+
 root@vagrant:/services/console/sbin# ./dirsync-tool.sh -a
+
+LDAP Access Endpoint    : ldap://ad.example.com/
+LDAP Access Principal   : CN=LDAP User,CN=Users,DC=ad,DC=example,DC=com
+LDAP Access Password    : ****
+
+Connecting to endpoint  : ldap://ad.example.com/
+With principal          : CN=LDAP User,CN=Users,DC=ad,DC=example,DC=com
+
+Authenticated
+Exiting authentication.
+Connection to ldap://ad.example.com/ with principal  CN=LDAP User,CN=Users,DC=ad,DC=example,DC=com was successful.
+
+Enter customer ID  [Numeric]: 500
+Name of service             :TestService
+Description of service      :TestDescription
+Label of service            :blue
+Precedence      [Numeric]   :1
+Customer Admin Group        :Admin 
+Standard Groups             :Standard
+LDAP Access SSL  [y/n]      :n
+LDAP Object Class           :objectClass
+LDAP Group Base             :CN=Builtin,D C=ad,DC=example,DC=com
+LDAP Group Description      :groups
+LDAP Group Name             :cn
+LDAP Group Usernames        :member
+LDAP Group Object Class     :group
+LDAP User Base              :CN=Users,DC=ad,DC=example,DC =com
+LDAP User Family Name       :sn
+LDAP User Given  Name       :givenName
+LDAP User Group             :memberOf
+LDAP User Email             :mail  
+LDAP User Object Class      :user
+LDAP User UserName          :sAMAccountName
+LDAP Default Phone Region   :US
+LDAP Email Regex            :
+LDAP Email Regex Index [Numeric] :
+LDAP User Mobile            :654654654
+LDAP User TimeZone          :TZ
+
+
+Created LDAP service Testing with ID : 800
 ```
 
 ## Listing LDAP services
@@ -134,30 +177,59 @@ root@vagrant:/services/console/sbin# ./dirsync-tool.sh -l
 
 Removing a LDAP service will remove the contents from both <code>customer_ldap_service</code> and <code>customer_ldap_directory</code> related that directory service.
 
-``
-
-``
+```
+root@vagrant:/services/console/sbin# ./dirsync-tool.sh -r <directory_service_id>
+```
 
 ## Updating LDAP service
 
 The tool allows a user to update exisitng LDAP services. It will prompt user to enter new values for each of the mutable attributes in code>customer_ldap_service</code> and <code>customer_ldap_directory</code> 
 
-``
-``
+```
+root@vagrant:/services/console/sbin# ./dirsync-tool.sh -u <directory_service_id>
+```
 
 ## Updating groups of a LDAP service
 
 Groups in AD is one of the attributes that changes more frequently. Customer can add/remove groups and these group name information will have to be changed manually for now. The tool allows you to change the change just the groups attributes of the LDAP service in Enstratius.
 
-``
-``
+```
+root@vagrant:/services/console/sbin# ./dirsync-tool.sh -m <directory_service_id>
+```
 
-# Listing group mapping 
+## Listing group mapping 
 
 The contents of group mappings is managed by the dirsync code. No manual steps for populating the database is required. However we can view it's contents by the tool for debugging puroposes.
 
 ```
+root@vagrant:/services/console/sbin# ./dirsync-tool.sh -g <directory_service_id>
 ```
+
+## Pre-Run Dirsync
+
+The tool allows you to run the directory  in a "Pre-Run" mode that only logs the changes that are going to be made if an actual run of a dirsync happened. This mode will not make any changes to the Database.
+
+```
+root@vagrant:/services/console/sbin# ./dirsync-tool.sh -p
+```
+
+## Run Dirsync
+
+Actual run of a directory synchronization process. 
+
+```
+root@vagrant:/services/console/sbin# ./dirsync-tool.sh -f
+```
+
+## Validating LDAP credentials
+
+The tool allows the user to validate LDAP credentials separately. It only requires the user to provide the LDAP endpoint, LDAP principal/username and LDAP password.
+
+```
+root@vagrant:/services/console/sbin# ./dirsync-tool.sh -c
+```
+
+
 
 
 
