@@ -109,50 +109,12 @@ Dirsync-Tool i.0 only supports user prompt feature for data intake. A customer c
  : The LDAP attribute storing the user’s preferred time zone.
 
 
-
-Once you have these information, it can be stored in the database via Dirsyc Tool. The tool will prompt user to enter all of the above information along with other general high level information.
+Once we have these information, it can be stored in the database via Dirsyc Tool. The tool will prompt user to enter all of the above information along with other general high level information.
 
 NOTE: The tool will validate the LDAP credentials first before passsing some other LDAP configuration values.
 
 ```
 root@vagrant:/services/console/sbin# ./dirsync-tool.sh -a
-
-LDAP Access Endpoint    : ldap://ad.example.com/
-LDAP Access Principal   : CN=LDAP User,CN=Users,DC=ad,DC=example,DC=com
-LDAP Access Password    : ****
-
-Connecting to endpoint  : ldap://ad.example.com/
-With principal          : CN=LDAP User,CN=Users,DC=ad,DC=example,DC=com
-
-Authenticated
-Exiting authentication.
-Connection to ldap://54.234.173.207:3268 with principal new.admin@cse.enstratus.com was successful.
-
-Enter customer ID  [Numeric]: 500
-Customer Admin Group        :Admin 
-Standard Groups             :Standard
-LDAP Access SSL  [y/n]      :n
-LDAP Object Class           :objectClass
-LDAP Group Base             :CN=Builtin,D C=ad,DC=example,DC=com
-LDAP Group Description      :groups
-LDAP Group Name             :cn
-LDAP Group Usernames        :member
-LDAP Group Object Class     :group
-LDAP User Base              :CN=Users,DC=ad,DC=example,DC =com
-LDAP User Family Name       :sn
-LDAP User Given  Name       :givenName
-LDAP User Group             :memberOf
-LDAP User Email             :mail  
-LDAP User Object Class      :user
-LDAP User UserName          :sAMAccountName
-LDAP Default Phone Region   :US
-LDAP Email Regex            :
-LDAP Email Regex Index [Numeric] :
-LDAP User Mobile            :654654654
-LDAP User TimeZone          :TZ
-
-
-Created LDAP service Testing with ID : 800
 ```
 
 ## Listing LDAP services
@@ -161,6 +123,7 @@ Created LDAP service Testing with ID : 800
 There are two tables in the console database that represents a LDAP service : <code>customer_ldap_service</code> and <code>customer_ldap_directory</code>. When listing a LDAP service with the tool, it incorporates the contents of both the tables into one. 
 
 ```
+root@vagrant:/services/console/sbin# ./dirsync-tool.sh -l
 ```
 
 ## Removing a LDAP service 
