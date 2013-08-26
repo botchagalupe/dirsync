@@ -221,7 +221,7 @@ ldapUserTimeZone=<String>
 
 ```
 
-Once you have save the file with all the respective values filled out, you can specify the path of the file as a parameter when calling '-f' action of the tool.
+Once you have saved the file with all the respective values filled out, you can specify the path of the file as a parameter when calling '-f' action of the tool in order to load the LDAP configuration values into the database.
 
 
 ```
