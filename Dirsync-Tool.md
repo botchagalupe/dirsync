@@ -123,15 +123,13 @@ A customer can have multiple LDAP services with different configurations. Before
  : The LDAP attribute storing the user’s preferred time zone.
 
 
-Once we have these information, it can be stored in the database via Dirsyc Tool. The directory synchronization process will extract information from the database in order to extract groups and users from LDAP server and sync them with Enstratius. 
-
-NOTE: The tool will validate the LDAP credentials first before moving on to populating the database.
+Once we have these information, it can be stored in the database via Dirsyc Tool. The directory synchronization process will extract information from the database to conenect with LDAP server. 
 
 There are two ways we cam add a LDAP service in Enstratius using the tool.
 
 ### Using user prompt inputs for LDAP configuration values.
 
-Adding a LDAP service with '-a' action allows the user to add LDAP service by taking inputs from the command prompt one by one.
+Adding a LDAP service with '-a' action allows the user to add LDAP service by taking user prompt inputs in succession.
 
 ```
 #Example 
@@ -182,7 +180,7 @@ Created LDAP service Testing with ID : 800
 
 ### Reading LDAP configuration values from a file.
 
-The other way to add a LDAP service is by using the '-f' action. You can prinout the template of file to be read by just calling the tool with '-f' action without any parameters.
+The other way to add a LDAP service is by reading LDAP configuration values from a file using the '-f' action. You can prinout the template of file to be read by calling the tool with '-f' action without any parameters.
 
 ```
 root@vagrant:/services/console/sbin# ./dirsync-tool.sh -f
@@ -221,8 +219,7 @@ ldapUserTimeZone=<String>
 
 ```
 
-Once you have saved the file with all the respective values filled out, you can specify the path of the file as a parameter when calling '-f' action of the tool in order to load the LDAP configuration values into the database.
-
+Once you have saved the file with all the respective values filled out, you can specify the path of the file as a parameter when calling '-f' action of the tool in order to load the LDAP configuration values into the database. 
 
 ```
 root@vagrant:/services/console/sbin# ./dirsync-tool.sh -f /services/console/sbin/addService 
@@ -233,8 +230,6 @@ Failed connecting to directory at endpoint ldap://ad.example.com/ : ad.example.c
 
 
 Created LDAP service TestService with ID : 400
-
-
 
 
 ***************************************************************
@@ -278,10 +273,50 @@ Created LDAP service TestService with ID : 400
 ## Listing LDAP services
 
 
-There are two tables in the console database that represents a LDAP service : <code>customer_ldap_service</code> and <code>customer_ldap_directory</code>. When listing a LDAP service with the tool, it incorporates the contents of both the tables into one. 
+There are two tables in the console database that represents a LDAP service : <code>customer_ldap_service</code> and <code>customer_ldap_directory</code>. When listing a LDAP service with the tool, it incorporates the contents of both the tables into one. Performing '-l' action without any parameters will list directory services present in the database for all customers. Performing '-l' with a customer ID as a parameter will list out directory services for that particular customer.
 
 ```
-root@vagrant:/services/console/sbin# ./dirsync-tool.sh -l
+
+root@vagrant:/services/console/sbin# ./dirsync-tool.sh -l 500
+
+
+***************************************************************
+      directoryServiceId          : 400
+      customerId                  : 500
+      active                      : true
+      name                        : TestService
+      description                 : TestDescription
+      precedence                  : 1
+      label                       : blue
+      type                        : LDAP
+
+      == LDAP Configuration ==
+
+      customerAdminGroup          : Admin
+      standardGroups              : Standard
+      ldapAccessEndpoint          : ldap://ad.example.com/
+      ldapAccessPrincipal         : CN=LDAP User,CN=Users,DC=ad,DC=example,DC=com
+      ldapAccessSecret            : 4a5f69089a092bd0
+      ldapAccessSsl               : false
+      ldapObjectClass             : objectClass
+      ldapGroupBase               : CN=Builtin,D C=ad,DC=example,DC=com
+      ldapGroupDescription        : groups
+      ldapGroupName               : cn
+      ldapGroupUsernames          : member
+      ldapGroupObjectClass        : group
+      ldapUserBase                : CN=Users,DC=ad,DC=example,DC =com
+      ldapUserEmail               : mail
+      ldapUserFamilyName          : sn
+      ldapUserGivenName           : givenName
+      ldapUserGroup               : memberOf
+      ldapUserObjectClass         : user
+      ldapUserUserName            : sAMAccountName
+      ldapDefaultPhoneRegion      : US
+      ldapEmailRegex              : 
+      ldapEmailRegexIndex         : null
+      ldapUserMobile              : 654654654
+      ldapUserTimeZone            : TZ
+
 ```
 
 ## Removing a LDAP service 
