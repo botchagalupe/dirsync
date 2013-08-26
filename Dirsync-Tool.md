@@ -45,7 +45,7 @@ Options:
 ```
 
 ## Adding LDAP service.
-Dirsync-Tool i.0 only supports user prompt feature for data intake. A customer can have multiple LDAP services with different configurations. Before integrating LDAP with Enstratius, we will require gathering of some schema mapping information from the LDAP/AD administrator.
+A customer can have multiple LDAP services with different configurations. Before integrating LDAP with Enstratius, we will require gathering of some schema mapping information from the LDAP/AD administrator.
 
 1. <code>customer_admin_group</code>
  : The CN of the group in the directory service (for example, ‘Administrators’) that will always have administrative access across all accounts in the infrastructure. This value may be null. If null, user must have some non-directory service group as admin group elsewhere. Enstratius will search under ldap_group_base for an object with an object class of ldap_ group_object_class and the CN matching this value. That group will be the admin group.
@@ -127,6 +127,12 @@ Once we have these information, it can be stored in the database via Dirsyc Tool
 
 NOTE: The tool will validate the LDAP credentials first before moving on to populating the database.
 
+There are two ways we cam add a LDAP service in Enstratius using the tool.
+
+### Using user prompt inputs for LDAP configuration values.
+
+Adding a LDAP service with '-a' action allows the user to add LDAP service by taking inputs from the command prompt one by one.
+
 ```
 #Example 
 
@@ -172,6 +178,101 @@ LDAP User TimeZone          :TZ
 
 
 Created LDAP service Testing with ID : 800
+```
+
+### Reading LDAP configuration values from a file.
+
+The other way to add a LDAP service is by using the '-f' action. You can prinout the template of file to be read by just calling the tool with '-f' action without any parameters.
+
+```
+root@vagrant:/services/console/sbin# ./dirsync-tool.sh -f
+ 
+## Template for adding LDAP service in Enstratius. Copy the contents of this file, add values and save.
+
+customerId=<Numberic>
+name=<String>
+description=<String>
+label=<String>
+precedence=<Numeric>
+customerAdminGroup=<String>
+standardGroups=<String>
+ldapAccessEndpoint=<String>
+ldapAccessPrincipal=<String>
+ldapAccessPassword=<String>
+ldapAccessSsl=<Boolean>
+ldapObjectClass=<String>
+ldapGroupBase=<String>
+ldapGroupDescription=<String>
+ldapGroupName=<String>
+ldapGroupUsernames=<String>
+ldapGroupObjectClass=<String>
+ldapUserBase=<String>
+ldapUserEmail=<String>
+ldapUserFamilyName=<String>
+ldapUserGivenName=<String>
+ldapUserGroup=<String>
+ldapUserObjectClass=<String>
+ldapUserUserName=<String>
+ldapDefaultPhoneRegion=<String [2]>
+ldapEmailRegex=<String>
+ldapEmailRegexIndex=<Numeric>
+ldapUserMobile=<String>
+ldapUserTimeZone=<String>
+
+```
+
+Once you have save the file with all the respective values filled out, you can specify the path of the file as a parameter when calling '-f' action of the tool.
+
+
+```
+root@vagrant:/services/console/sbin# ./dirsync-tool.sh -f /services/console/sbin/addService 
+
+Connecting to endpoint  : ldap://ad.example.com/
+With principal          : CN=LDAP User,CN=Users,DC=ad,DC=example,DC=com
+Failed connecting to directory at endpoint ldap://ad.example.com/ : ad.example.com:389
+
+
+Created LDAP service TestService with ID : 400
+
+
+
+
+***************************************************************
+      directoryServiceId          : 400
+      customerId                  : 500
+      active                      : true
+      name                        : TestService
+      description                 : TestDescription
+      precedence                  : 1
+      label                       : blue    
+      type                        : LDAP
+
+      == LDAP Configuration ==
+
+      customerAdminGroup          : Admin
+      standardGroups              : Standard
+      ldapAccessEndpoint          : ldap://ad.example.com/
+      ldapAccessPrincipal         : CN=LDAP User,CN=Users,DC=ad,DC=example,DC=com
+      ldapAccessSecret            : 4a5f69089a092bd0
+      ldapAccessSsl               : false
+      ldapObjectClass             : objectClass
+      ldapGroupBase               : CN=Builtin,D C=ad,DC=example,DC=com
+      ldapGroupDescription        : groups    
+      ldapGroupName               : cn      
+      ldapGroupUsernames          : member  
+      ldapGroupObjectClass        : group   
+      ldapUserBase                : CN=Users,DC=ad,DC=example,DC =com
+      ldapUserEmail               : mail
+      ldapUserFamilyName          : sn      
+      ldapUserGivenName           : givenName
+      ldapUserGroup               : memberOf
+      ldapUserObjectClass         : user    
+      ldapUserUserName            : sAMAccountName
+      ldapDefaultPhoneRegion      : US          
+      ldapEmailRegex              : 
+      ldapEmailRegexIndex         : null
+      ldapUserMobile              : 654654654        
+      ldapUserTimeZone            : TZ 
 ```
 
 ## Listing LDAP services
