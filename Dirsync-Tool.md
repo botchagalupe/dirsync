@@ -12,25 +12,35 @@ root@vagrant:/services/console/sbin# ./dirsync-tool.sh -h
 Usage: -action
 
 Options:
-   -v, --version              show program's version number and exit.
-   -h, --help                 show this help message and exit.
+   -v, --version                      show program's version number and exit.
+   -h, --help                         show this help message and exit.
 
-    Main actions:
+    Configure actions:
     ---------------------------------------
 
-      -l $customerId          List a LDAP service for a particular customer from console database.
-                              Not specifying customer id returns LDAP services for all the customer.
+      -l $customerId                  List a LDAP service for a particular customer.
+                                      Not specifying customer id returns LDAP services for all the customer.
+      -g $directoryServiceID          List group mapping for a specific directory service.
+                                      Not specifying directory service id returns all group mapping.
+      -a                              Add a LDAP Service by taking LDAP configuration as inputs from user prompt. 
+      -f $filePath                    Add a LDAP service by reading LDAP configuration from a properties file.
+                                      Not specifying the path will print out a template of the file to read from.
+      -u $directoryServiceID          Update existing LDAP Service by taking inputs from user prompt. 
+      -m $serviceId:$fieldToUpdate:$newValue
+                                      Update a specific field of the specific LDAP service from the database.
+      -s $directoryServiceId:$standardGroups
+                                      Add standard groups(separated by ',') for a specific LDAP service.
+      -k $directoryServiceId:$standardGroups
+                                      Remove standard groups(separated by ',') for a specific LDAP service.
+      -r $directoryServiceID          Remove specific LDAP service from database. 
+      -c                              Check authentication with LDAP credentials.
 
-      -g $directoryServiceID  List group mapping for a specific directory service
-                              Not specifying directory service id returns all group mapping.
 
-      -a                      Add a LDAP Service. 
-      -u $directoryServiceID  Update existing LDAP Service in database. 
-      -r $directoryServiceID  Remove sepcific LDAP service from database. 
-      -p                      Pre-run dirsync. 
-      -f                      Run dirsync
-      -c                      Check authentication with LDAP credentials.
-      -m $directoryServiceID  Update customer admin and standard groups for a LDAP service.
+    Dirsync actions:
+    ---------------------------------------
+
+      --prerun                        Pre-run dirsync. 
+      --run                           Run dirsync.
 
 ```
 
