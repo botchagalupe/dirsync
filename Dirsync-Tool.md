@@ -274,7 +274,7 @@ Created LDAP service TestService with ID : 400
       ldapUserObjectClass         : user    
       ldapUserUserName            : sAMAccountName
       ldapDefaultPhoneRegion      : US          
-      ldapEmailRegex              : 
+      ldapEmailRegex              : null
       ldapEmailRegexIndex         : null
       ldapUserMobile              : 654654654        
       ldapUserTimeZone            : TZ 
@@ -325,7 +325,7 @@ root@vagrant:/services/console/sbin# ./dirsync-tool.sh -l 500
       ldapUserObjectClass         : user
       ldapUserUserName            : sAMAccountName
       ldapDefaultPhoneRegion      : US
-      ldapEmailRegex              : 
+      ldapEmailRegex              : null
       ldapEmailRegexIndex         : null
       ldapUserMobile              : 654654654
       ldapUserTimeZone            : TZ
@@ -340,17 +340,17 @@ Removing a LDAP service will remove the contents from both <code>customer_ldap_s
 dirsync-tool.sh -r <directory_service_id>
 
 Example :
+
 root@vagrant:/services/console/sbin# ./dirsync-tool.sh -r 500
 INFO: LDAP service with id : 500 has been removed.
 ```
 
 ## Updating LDAP service
-There are two ways how a user can update an existing LDAP service.
+There are two ways on how a user can update an existing LDAP service.
 
-### Using user prompt inputs for updating LDAP configuration values.
-Updating a LDAP service using user prompt inputs promp users to input 
+#### Using user prompt inputs for updating LDAP configuration values.
 
-The tool allows a user to update exisitng LDAP services. It will prompt user to enter new values in succession. Pressing enter will not make changes to the attribute.
+It will prompt user to enter new LDAP configuration values for a LDAP service in succession. Pressing enter will not make changes to the attribute.
 
 ```
 root@vagrant:/services/console/sbin# ./dirsync-tool.sh -u <directory_service_id>
