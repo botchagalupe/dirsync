@@ -129,7 +129,7 @@ There are two ways we cam add a LDAP service in Enstratius using the tool.
 
 ### Using user prompt inputs for LDAP configuration values.
 
-Adding a LDAP service with '-a' action allows the user to add LDAP service by taking user prompt inputs in succession.
+Adding a LDAP service with user input action allows the user to add LDAP service by taking user prompt inputs in succession.
 
 ```
 dirsync-tool.sh -a
@@ -182,7 +182,7 @@ Created LDAP service Testing with ID : 800
 
 ### Reading LDAP configuration values from a file.
 
-The other way to add a LDAP service is by reading LDAP configuration values from a file using the '-f' action. You can prinout the template of file to be read by calling the tool with '-f' action without any parameters.
+The other way to add a LDAP service is by reading LDAP configuration values from a file. You can prinout the template of file to be read by calling the tool with '-f' action without any parameters.
 
 ```
 dirsync-tool.sh -f 
@@ -225,7 +225,7 @@ ldapUserTimeZone=<String>
 
 ```
 
-Once you have saved the file with all the respective values filled out, you can specify the path of the file as a parameter when calling '-f' action of the tool in order to load the LDAP configuration values into the database. 
+Once you have saved the file with all the respective values filled out, you can specify the path of the file as a parameter  in order to load the LDAP configuration values into the database. 
 
 ```
 dirsync-tool.sh -r <path/of/file>
@@ -282,12 +282,11 @@ Created LDAP service TestService with ID : 400
 
 ## Listing LDAP services
 
-
-There are two tables in the console database that represents a LDAP service : <code>customer_ldap_service</code> and <code>customer_ldap_directory</code>. When listing a LDAP service with the tool, it incorporates the contents of both the tables into one. Performing '-l' action without any parameters will list directory services present in the database for all customers. Performing '-l' with a customer ID as a parameter will list out directory services for that particular customer.
+ Listing a LDAP service with the tool will incorporates the contents of both the tables,<code>customer_ldap_service</code> and <code>customer_ldap_directory</code>, into one. Providing customer id will print all LDAP services for that customer.
 
 ```
 dirsync-tool.sh -l 
-dirsync-tool.sh -l 500
+dirsync-tool.sh -l <customer_id>
 
 Example: 
 
@@ -335,7 +334,7 @@ root@vagrant:/services/console/sbin# ./dirsync-tool.sh -l 500
 
 ## Removing a LDAP service 
 
-Removing a LDAP service will remove the contents from both <code>customer_ldap_service</code> and <code>customer_ldap_directory</code> related that directory service.
+Removing a LDAP service will remove the contents from both <code>customer_ldap_service</code> and <code>customer_ldap_directory</code> tables in the database.
 
 ```
 dirsync-tool.sh -r <directory_service_id>
@@ -346,8 +345,12 @@ INFO: LDAP service with id : 500 has been removed.
 ```
 
 ## Updating LDAP service
+There are two ways how a user can update an existing LDAP service.
 
-The tool allows a user to update exisitng LDAP services. It will prompt user to enter new values for each of the mutable attributes in code>customer_ldap_service</code> and <code>customer_ldap_directory</code> 
+### Using user prompt inputs for updating LDAP configuration values.
+Updating a LDAP service using user prompt inputs promp users to input 
+
+The tool allows a user to update exisitng LDAP services. It will prompt user to enter new values in succession. Pressing enter will not make changes to the attribute.
 
 ```
 root@vagrant:/services/console/sbin# ./dirsync-tool.sh -u <directory_service_id>
