@@ -132,7 +132,9 @@ There are two ways we cam add a LDAP service in Enstratius using the tool.
 Adding a LDAP service with '-a' action allows the user to add LDAP service by taking user prompt inputs in succession.
 
 ```
-#Example 
+dirsync-tool.sh -a
+
+Example: 
 
 root@vagrant:/services/console/sbin# ./dirsync-tool.sh -a
 
@@ -183,6 +185,10 @@ Created LDAP service Testing with ID : 800
 The other way to add a LDAP service is by reading LDAP configuration values from a file using the '-f' action. You can prinout the template of file to be read by calling the tool with '-f' action without any parameters.
 
 ```
+dirsync-tool.sh -f 
+
+Example :
+
 root@vagrant:/services/console/sbin# ./dirsync-tool.sh -f
  
 ## Template for adding LDAP service in Enstratius. Copy the contents of this file, add values and save.
@@ -222,6 +228,10 @@ ldapUserTimeZone=<String>
 Once you have saved the file with all the respective values filled out, you can specify the path of the file as a parameter when calling '-f' action of the tool in order to load the LDAP configuration values into the database. 
 
 ```
+dirsync-tool.sh -r <path/of/file>
+
+Example: 
+
 root@vagrant:/services/console/sbin# ./dirsync-tool.sh -f /services/console/sbin/addService 
 
 Connecting to endpoint  : ldap://ad.example.com/
@@ -276,6 +286,10 @@ Created LDAP service TestService with ID : 400
 There are two tables in the console database that represents a LDAP service : <code>customer_ldap_service</code> and <code>customer_ldap_directory</code>. When listing a LDAP service with the tool, it incorporates the contents of both the tables into one. Performing '-l' action without any parameters will list directory services present in the database for all customers. Performing '-l' with a customer ID as a parameter will list out directory services for that particular customer.
 
 ```
+dirsync-tool.sh -l 
+dirsync-tool.sh -l 500
+
+Example: 
 
 root@vagrant:/services/console/sbin# ./dirsync-tool.sh -l 500
 
@@ -324,7 +338,11 @@ root@vagrant:/services/console/sbin# ./dirsync-tool.sh -l 500
 Removing a LDAP service will remove the contents from both <code>customer_ldap_service</code> and <code>customer_ldap_directory</code> related that directory service.
 
 ```
-root@vagrant:/services/console/sbin# ./dirsync-tool.sh -r <directory_service_id>
+dirsync-tool.sh -r <directory_service_id>
+
+Example :
+root@vagrant:/services/console/sbin# ./dirsync-tool.sh -r 500
+INFO: LDAP service with id : 500 has been removed.
 ```
 
 ## Updating LDAP service
