@@ -404,7 +404,7 @@ Updated Directory Service [400]
 ```
 
 
-#### Updating specific attributes of a ldap service.
+#### Updating specific attributes of a LDAP service.
 
 ```
 dirsync-tool.sh -m <directory_service_id>:<attribute_name>:<new_value>
