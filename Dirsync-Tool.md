@@ -158,7 +158,7 @@ Customer Admin Group        :Admin
 Standard Groups             :Standard
 LDAP Access SSL  [y/n]      :n
 LDAP Object Class           :objectClass
-LDAP Group Base             :CN=Builtin,D C=ad,DC=example,DC=com
+LDAP Group Base             :CN=Builtin,DC=ad,DC=example,DC=com
 LDAP Group Description      :groups
 LDAP Group Name             :cn
 LDAP Group Usernames        :member
@@ -261,7 +261,7 @@ Created LDAP service TestService with ID : 400
       ldapAccessSecret            : 4a5f69089a092bd0
       ldapAccessSsl               : false
       ldapObjectClass             : objectClass
-      ldapGroupBase               : CN=Builtin,D C=ad,DC=example,DC=com
+      ldapGroupBase               : CN=Builtin,DC=ad,DC=example,DC=com
       ldapGroupDescription        : groups    
       ldapGroupName               : cn      
       ldapGroupUsernames          : member  
@@ -312,7 +312,7 @@ root@vagrant:/services/console/sbin# ./dirsync-tool.sh -l 500
       ldapAccessSecret            : 4a5f69089a092bd0
       ldapAccessSsl               : false
       ldapObjectClass             : objectClass
-      ldapGroupBase               : CN=Builtin,D C=ad,DC=example,DC=com
+      ldapGroupBase               : CN=Builtin,DC=ad,DC=example,DC=com
       ldapGroupDescription        : groups
       ldapGroupName               : cn
       ldapGroupUsernames          : member
@@ -353,15 +353,216 @@ There are two ways on how a user can update an existing LDAP service.
 It will prompt user to enter new LDAP configuration values for a LDAP service in succession. Pressing enter will not make changes to the attribute.
 
 ```
-root@vagrant:/services/console/sbin# ./dirsync-tool.sh -u <directory_service_id>
+dirsync-tool.sh -u <directory_service_id>
+
+Example : 
+
+root@vagrant:/services/console/sbin# ./dirsync-tool.sh -u 400
+*****************************************************
+ Updating LDAP Service : (TestService:400:500)
+*****************************************************
+Directory Service Id (400)
+Customer ID (500) : 
+Active      (true) : 
+Name        (TestService) : 
+Description (TestDescription) : 
+Label       (blue) : 
+Precedence  (1) :
+*****************************************************
+ Updating LDAP directory : (400:500)
+*****************************************************
+Directory Service Id (400)
+Customer ID (500) : 
+Customer Admin Group        (Admin) :
+Standard Groups             (Standard) :
+LDAP Access Endpoint        (ldap://ad.example.com/) :
+LDAP Access Principal       (CN=LDAP User,CN=Users,DC=ad,DC=example,DC=com) :
+LDAP Access Secret          (c95aabc96b947353) :
+LDAP Access SSL             (Y/N) :
+LDAP Group Base             (CN=Builtin,DC=ad,DC=example,DC=com) :
+LDAP Group Description      (groups) :
+LDAP Group Name             (cn) :
+LDAP Group Usernames        (member) :
+LDAP Group Object Class     (group) :
+
+LDAP User Base              (CN=Users,DC=ad,DC=example,DC =com) :
+LDAP User Family Name       (sn) :
+LDAP User Given  Name       (givenName) :
+LDAP User Group             (memberOf) :
+LDAP User Email             (mail) :
+LDAP User Object Class      (user) :
+
+LDAP Object Class      (objectClass) :
+LDAP User UserName          (sAMAccountName) :
+LDAP Default Phone Region   (US) :
+LDAP Email Regex            (null) :
+LDAP Email Regex Index      (null) :
+LDAP User Mobile            (654654654) :
+LDAP User TimeZone          (TZ) :
+
+Updated Directory Service [400]
 ```
 
-## Updating groups of a LDAP service
 
-Groups in AD is one of the attributes that changes more frequently. Customer can add/remove groups and these group name information will have to be changed manually for now. The tool allows you to change the change just the groups attributes of the LDAP service in Enstratius.
+#### Updating specific attributes of a ldap service.
 
 ```
-root@vagrant:/services/console/sbin# ./dirsync-tool.sh -m <directory_service_id>
+dirsync-tool.sh -m <directory_service_id>:<attribute_name>:<new_value>
+
+Example:
+
+root@vagrant:/services/console/sbin# ./dirsync-tool.sh -m 400:name:TestChange
+
+Updated Directory Service [400] Field [name] with new value [TestChange].
+
+
+
+***************************************************************
+      directoryServiceId          : 400
+      customerId                  : 500
+      active                      : true
+      name                        : TestChange
+      description                 : TestDescription
+      precedence                  : 1
+      label                       : blue
+      type                        : LDAP
+
+      == LDAP Configuration ==
+
+      customerAdminGroup          : Admin
+      standardGroups              : Standard
+      ldapAccessEndpoint          : ldap://ad.example.com/
+      ldapAccessPrincipal         : CN=LDAP User,CN=Users,DC=ad,DC=example,DC=com
+      ldapAccessSecret            : c95aabc96b947353
+      ldapAccessSsl               : false
+      ldapObjectClass             : objectClass
+      ldapGroupBase               : CN=Builtin,DC=ad,DC=example,DC=com
+      ldapGroupDescription        : groups
+      ldapGroupName               : cn
+      ldapGroupUsernames          : member
+      ldapGroupObjectClass        : group
+      ldapUserBase                : CN=Users,DC=ad,DC=example,DC =com
+      ldapUserEmail               : mail
+      ldapUserFamilyName          : sn
+      ldapUserGivenName           : givenName
+      ldapUserGroup               : memberOf
+      ldapUserObjectClass         : user
+      ldapUserUserName            : sAMAccountName
+      ldapDefaultPhoneRegion      : US
+      ldapEmailRegex              : null
+      ldapEmailRegexIndex         : null
+      ldapUserMobile              : 654654654
+      ldapUserTimeZone            : TZ
+```
+
+## Updating standard groups of a LDAP service
+
+Standard groups in AD is one of the attributes that changes more frequently. There are cases where rather than replacing the standard groups of a LDAP service, we require adding more groups to the existing list. We can add/remove groups from existing list with the help of the dirsycn-tool.
+
+#### Adding standard groups
+
+```
+dirsync-tool.sh -s <dirctory_service_id>:<standard_groups to add separated by commas.>
+
+Example :
+
+root@vagrant:/services/console/sbin# ./dirsync-tool.sh -s 400:standard2,standard3,standard4
+New standard group list for LDAP service 400 will be Standard,standard2,standard3,standard4
+
+Added new standard groups.
+
+
+
+***************************************************************
+      directoryServiceId          : 400
+      customerId                  : 500
+      active                      : true
+      name                        : TestChange
+      description                 : TestDescription
+      precedence                  : 1
+      label                       : blue
+      type                        : LDAP
+
+      == LDAP Configuration ==
+
+      customerAdminGroup          : Admin
+      standardGroups              : Standard,standard2,standard3,standard4
+      ldapAccessEndpoint          : ldap://ad.example.com/
+      ldapAccessPrincipal         : CN=LDAP User,CN=Users,DC=ad,DC=example,DC=com
+      ldapAccessSecret            : c95aabc96b947353
+      ldapAccessSsl               : false
+      ldapObjectClass             : objectClass
+      ldapGroupBase               : CN=Builtin,DC=ad,DC=example,DC=com
+      ldapGroupDescription        : groups
+      ldapGroupName               : cn
+      ldapGroupUsernames          : member
+      ldapGroupObjectClass        : group
+      ldapUserBase                : CN=Users,DC=ad,DC=example,DC =com
+      ldapUserEmail               : mail
+      ldapUserFamilyName          : sn
+      ldapUserGivenName           : givenName
+      ldapUserGroup               : memberOf
+      ldapUserObjectClass         : user
+      ldapUserUserName            : sAMAccountName
+      ldapDefaultPhoneRegion      : US
+      ldapEmailRegex              : null
+      ldapEmailRegexIndex         : null
+      ldapUserMobile              : 654654654
+      ldapUserTimeZone            : TZ
+```
+
+#### Removing standard groups
+
+```
+dirsync-tool.sh -s <dirctory_service_id>:<standard_groups to remove separated by commas.>
+
+Example : 
+
+root@vagrant:/services/console/sbin# ./dirsync-tool.sh -k 400:standard3
+Removing 'standard3' from existing standard group list.
+New standard group list for LDAP service 400 will be Standard,standard2,standard4
+
+Removed specified standard groups.
+
+
+
+***************************************************************
+      directoryServiceId          : 400
+      customerId                  : 500
+      active                      : true
+      name                        : TestChange
+      description                 : TestDescription
+      precedence                  : 1
+      label                       : blue
+      type                        : LDAP
+
+      == LDAP Configuration ==
+
+      customerAdminGroup          : Admin
+      standardGroups              : Standard,standard2,standard4
+      ldapAccessEndpoint          : ldap://ad.example.com/
+      ldapAccessPrincipal         : CN=LDAP User,CN=Users,DC=ad,DC=example,DC=com
+      ldapAccessSecret            : c95aabc96b947353
+      ldapAccessSsl               : false
+      ldapObjectClass             : objectClass
+      ldapGroupBase               : CN=Builtin,DC=ad,DC=example,DC=com
+      ldapGroupDescription        : groups
+      ldapGroupName               : cn
+      ldapGroupUsernames          : member
+      ldapGroupObjectClass        : group
+      ldapUserBase                : CN=Users,DC=ad,DC=example,DC =com
+      ldapUserEmail               : mail
+      ldapUserFamilyName          : sn
+      ldapUserGivenName           : givenName
+      ldapUserGroup               : memberOf
+      ldapUserObjectClass         : user
+      ldapUserUserName            : sAMAccountName
+      ldapDefaultPhoneRegion      : US
+      ldapEmailRegex              : null
+      ldapEmailRegexIndex         : null
+      ldapUserMobile              : 654654654
+      ldapUserTimeZone            : TZ
+      
 ```
 
 ## Listing group mapping 
@@ -370,30 +571,116 @@ The contents of group mappings is managed by the dirsync code. No manual steps f
 
 ```
 root@vagrant:/services/console/sbin# ./dirsync-tool.sh -g <directory_service_id>
+
+Example : 
+
+root@vagrant:/services/console/sbin# ./dirsync-tool.sh -g 400
+Group Id               : 300
+Directory Service Id   : 400
+Directory Group Id     : CN=Admin,CN=Builtin,DC=ad,DC=example,DC=com
+
 ```
 
 ## Pre-Run Dirsync
 
-The tool allows you to run the directory  in a "Pre-Run" mode that only logs the changes that are going to be made if an actual run of a dirsync happened. This mode will not make any changes to the Database.
+The tool allows you to run the directory  in a "Pre-Run" mode that only logs the changes that are going to be made if an actual run of a dirsync happened. This mode will not make any changes to the Database. 
+
+Also make sure the log4j settings for console is configured to print out dirsync logs.
+
+Add the following category in /services/console/resources/log4j.xml to print out the pre-run logs of a dirsync.
 
 ```
-root@vagrant:/services/console/sbin# ./dirsync-tool.sh -p
+  <category name="es.prerun">
+    <priority value="TRACE" />
+  </category>
 ```
+
+Then execute the command to pre-run dirsync.
+
+```
+dirsync-tool.sh --prerun
+
+Example :
+
+root@vagrant:/services/console/sbin# ./dirsync-tool.sh --prerun
+Running dirsync with prerun  = true
+com.valtira.cms.types.AdAttributeFactory
+com.valtira.cms.types.AdTypeAttributeFactory
+com.valtira.cms.types.CategoryAttributeFactory
+com.valtira.cms.types.LinkAttributeFactory
+com.valtira.cms.types.MediaAttributeFactory
+com.valtira.cms.types.MediaGroupAttributeFactory
+com.valtira.cms.types.MediaTypeAttributeFactory
+com.valtira.cms.types.PageAttributeFactory
+com.valtira.cms.types.ColorAttributeFactory
+
+com.valtira.blog.types.ForumAttributeFactory
+
+Dirsync Run [Pre-run=true]  took : 16 seconds.
+
+```
+The logs for the pre-run of a dirsync can be found under /services/console/logs/dirsynclogs directory.
+
 
 ## Run Dirsync
 
 Actual run of a directory synchronization process. 
 
+Make sure the log4j settings for console is configured to print out dirsync logs.
+
+Add the following category in /services/console/resources/log4j.xml to print out the logs of a dirsync run.
+
 ```
-root@vagrant:/services/console/sbin# ./dirsync-tool.sh -f
+  <category name="es.directory">
+    <priority value="TRACE" />
+  </category>
 ```
+
+Then execute the command to run dirsync.
+
+
+```
+dirsync-tool.sh --run
+
+Example : 
+
+root@vagrant:/services/console/sbin# ./dirsync-tool.sh --run
+Running dirsync with prerun  = false
+com.valtira.cms.types.AdAttributeFactory
+com.valtira.cms.types.AdTypeAttributeFactory
+com.valtira.cms.types.CategoryAttributeFactory
+com.valtira.cms.types.LinkAttributeFactory
+com.valtira.cms.types.MediaAttributeFactory
+com.valtira.cms.types.MediaGroupAttributeFactory
+com.valtira.cms.types.MediaTypeAttributeFactory
+com.valtira.cms.types.PageAttributeFactory
+com.valtira.cms.types.ColorAttributeFactory
+
+com.valtira.blog.types.ForumAttributeFactory
+
+Dirsync Run [Pre-run=false]  took : 16 seconds.
+
+```
+The logs for the pre-run of a dirsync can be found under /services/console/logs/dirsynclogs directory.
 
 ## Validating LDAP credentials
 
 The tool allows the user to validate LDAP credentials separately. It only requires the user to provide the LDAP endpoint, LDAP principal/username and LDAP password.
 
 ```
+dirsync-tool.sh -c
+
+Example : 
+
 root@vagrant:/services/console/sbin# ./dirsync-tool.sh -c
+LDAP Endpoint           : ldap://ad.example.com/
+LDAP Access Principal   : CN=LDAP User,CN=Users,DC=ad,DC=example,DC=com
+LDAP Password           : testtesttest
+Connecting to endpoint  : ldap://ad.example.com/
+With principal          : CN=LDAP User,CN=Users,DC=ad,DC=example,DC=com
+Failed connecting to directory at endpoint ldap://ad.example.com/ : ad.example.com:389
+ERROR: Connection to ldap://ad.example.com/ with principal CN=LDAP User,CN=Users,DC=ad,DC=example,DC=com failed.
+
 ```
 
 
